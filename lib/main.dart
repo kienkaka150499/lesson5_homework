@@ -1,23 +1,29 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:lesson5_homework/product_screen.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 import 'models/product.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MaterialApp(
+    return const MaterialApp(
       home: HomeScreen(),
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _HomeScreenState();
 }
@@ -55,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         price: '\$21.9',
         description: 'Chân váy dài công sở dành cho chị em'),
   ];
-  List<bool> favorite=[];
+  List<int> inCart = [];
 
   @override
   Widget build(BuildContext context) {
@@ -65,106 +71,130 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.purple.withOpacity(0.8),
         leading: IconButton(
           onPressed: () {},
-          icon: Icon(Icons.menu, color: Colors.white),
+          icon: const Icon(Icons.menu, color: Colors.white),
         ),
-        title: Text(
+        title: const Text(
           'MyShop',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(Icons.more_vert, color: Colors.white),
           ),
-          IconButton(
-              onPressed: () {}, icon: Icon(Icons.shopping_cart, color: Colors.white))
+          Badge(
+            position: BadgePosition.topEnd(top: 5, end: 8),
+            toAnimate: false,
+            // animationType: BadgeAnimationType.scale,
+            // animationDuration: const Duration(milliseconds: 300),
+            badgeContent: Text(
+              inCart.length.toString(),
+              style: const TextStyle(color: Colors.white),
+            ),
+            showBadge: inCart.isEmpty ? false : true,
+            badgeColor: Colors.red,
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+            ),
+          )
         ],
       ),
       body: SafeArea(
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, top: 5, right: 15),
-            child: GridView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                if(index>=favorite.length){
-                  favorite.add(false);
-                }
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => ProductScreen(
-                                  product: products[index],
-                                )));
-                  },
-                  child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(15)),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.asset(
-                            products[index].imageURL,
-                            fit: BoxFit.fitWidth,
+          child: GridView.builder(
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => ProductScreen(
+                                product: products[index],
+                              )));
+                },
+                child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                  margin: const EdgeInsets.all(6),
+                  alignment: Alignment.center,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          products[index].imageURL,
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width / 2 - 12,
+                        ),
+                      ),
+                      Container(
+                        height: 45,
+                        width: MediaQuery.of(context).size.width / 2 - 12,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.6),
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
                           ),
                         ),
-                        Positioned(
-                          top: 60,
-                          child: Container(
-                            height: 45,
-                            width: 150,
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.6),
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15))),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      setState((){
-                                        favorite[index]=!favorite[index];
-                                      });
-                                    },
-                                    icon: favorite[index]?Icon(
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  products[index].favorite =
+                                      !products[index].favorite;
+                                });
+                              },
+                              icon: products[index].favorite
+                                  ? const Icon(
                                       Icons.favorite,
                                       color: Colors.purpleAccent,
-                                    ):Icon(
+                                    )
+                                  : const Icon(
                                       Icons.favorite_border,
                                       color: Colors.purpleAccent,
-                                    ),),
-                                Expanded(
-                                    child: Text(
-                                  products[index].name,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15),
-                                  textAlign: TextAlign.center,
-                                )),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.shopping_cart,
-                                      color: Colors.purpleAccent,
-                                    ))
-                              ],
+                                    ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
+                            Expanded(
+                                child: TextScroll(
+                              products[index].name,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15),
+                              textAlign: TextAlign.center,
+                                  mode: TextScrollMode.bouncing,
+                                  velocity: Velocity(pixelsPerSecond: Offset(40,0)),
+                                  pauseBetween: Duration(seconds: 1),
+                            )),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    inCart.contains(products[index].id)
+                                        ? inCart.remove(products[index].id)
+                                        : inCart.add(products[index].id);
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.purpleAccent,
+                                ))
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                );
-              },
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 300,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15,
-                  childAspectRatio: 3 / 2),
-            ),
+                ),
+              );
+            },
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
+                childAspectRatio: 3 / 2),
           ),
         ),
       ),

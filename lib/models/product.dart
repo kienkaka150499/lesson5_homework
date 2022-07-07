@@ -4,6 +4,8 @@ class Product {
   String name;
   String price;
   String description;
+  bool favorite=false;
+  bool inCart=false;
 
   Product(
       {required this.id,
