@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'models/product.dart';
+import '../models/product.dart';
 
 class ProductScreen extends StatelessWidget {
   Product product;
@@ -23,6 +24,12 @@ class ProductScreen extends StatelessWidget {
                   height: MediaQuery.of(context).size.width,
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,
+                  errorBuilder: (a, b, c) {
+                    return Icon(
+                      Icons.image,
+                      size: MediaQuery.of(context).size.width,
+                    );
+                  },
                 ),
                 Positioned(
                   top: 50,
@@ -30,9 +37,10 @@ class ProductScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.arrow_back,
-                      color: Colors.white,
+                      color: Colors.black,
+                      size: ScreenUtil().setWidth(80),
                     ),
                   ),
                 ),
@@ -55,7 +63,7 @@ class ProductScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Text(product.price,
+            Text("\$${product.price}",
                 style: TextStyle(
                     color: Colors.black.withOpacity(0.4), fontSize: 30),
                 textAlign: TextAlign.center),
