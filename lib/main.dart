@@ -13,12 +13,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ScreenUtilInit(
-      designSize: const Size(1080, 1920),
-      builder: (BuildContext context, Widget? child) => const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: HomeScreen(),
-      ),
+    // return ScreenUtilInit(
+    //   designSize: const Size(1080, 1920),
+    //   builder: (BuildContext context, Widget? child) => const MaterialApp(
+    //     debugShowCheckedModeBanner: false,
+    //     home: HomeScreen(),
+    //   ),
+    // );
+
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomeScreen(),
     );
   }
 }

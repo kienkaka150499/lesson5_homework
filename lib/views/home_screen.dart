@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lesson5_homework/views/cart_screen.dart';
 
 import '../models/product.dart';
+import '../utils/dimen_utils.dart';
 import 'edit_product.dart';
 import 'fake_data.dart';
 import 'product_screen.dart';
@@ -27,17 +28,24 @@ class _HomeScreenState extends State<HomeScreen> {
     isListView = false;
     isShowMenu = false;
     super.initState();
+
+    double sizeHeight = getSizeHeight(200);
+
+    double sizeWidth = getSizeWidth(300);
+
+    print('Height: $sizeHeight , Width: $sizeWidth');
+
   }
 
   Widget _buildSideMenu() {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: ScreenUtil().setWidth(isShowMenu ? 300 : 0),
+      width: getSizeWidth(isShowMenu ? 300 : 0),
       color: Colors.purple.withOpacity(0.7),
       child: Column(
         children: [
           SizedBox(
-            height: ScreenUtil().setHeight(200),
+            height: getSizeHeight(200),
           ),
           InkWell(
             onTap: () {
@@ -46,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
             child: SizedBox(
-              width: ScreenUtil().setWidth(300),
-              height: ScreenUtil().setHeight(70),
+              width: getSizeWidth(300),
+              height: getSizeHeight(70),
               child: const Text(
                 'List Products',
                 style: TextStyle(fontSize: 27, color: Colors.white),
@@ -66,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
             child: SizedBox(
-              width: ScreenUtil().setWidth(300),
-              height: ScreenUtil().setHeight(70),
+              width: getSizeWidth(300),
+              height: getSizeHeight(70),
               child: const Text(
                 'Grid Products',
                 style: TextStyle(fontSize: 27, color: Colors.white),
@@ -93,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(
             Icons.menu,
             color: Colors.white,
-            size: ScreenUtil().setHeight(60),
+            size: getSizeHeight(60),
           ),
         ),
         title: const Text(
@@ -106,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(
               Icons.more_vert,
               color: Colors.white,
-              size: ScreenUtil().setHeight(60),
+              size: getSizeHeight(60),
             ),
           ),
           Badge(
@@ -135,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(
                   Icons.shopping_cart,
                   color: Colors.white,
-                  size: ScreenUtil().setHeight(60),
+                  size: getSizeHeight(60),
                 ),
               ),
             ),
@@ -147,10 +155,10 @@ class _HomeScreenState extends State<HomeScreen> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.only(
-              top: ScreenUtil().setHeight(20),
-              bottom: ScreenUtil().setHeight(20),
-              right: ScreenUtil().setWidth(20),
-              left: ScreenUtil().setWidth(isShowMenu ? 320 : 20),
+              top: getSizeHeight(20),
+              bottom: getSizeHeight(20),
+              right: getSizeWidth(20),
+              left: getSizeWidth(isShowMenu ? 320 : 20),
             ),
             child: GridView.builder(
               itemCount: products.length,
@@ -227,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Expanded(
                                 child: Badge(
                                   position: BadgePosition.topEnd(
-                                      top: 1, end: ScreenUtil().setWidth(10)),
+                                      top: 1, end: getSizeWidth(10)),
                                   toAnimate: false,
                                   // animationType: BadgeAnimationType.scale,
                                   // animationDuration: const Duration(milliseconds: 300),
@@ -290,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(
               Icons.menu,
               color: Colors.white,
-              size: ScreenUtil().setHeight(60),
+              size: getSizeHeight(60),
             ),
           ),
           title: const Text(
@@ -299,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
+              padding: EdgeInsets.only(right: getSizeWidth(30)),
               child: IconButton(
                 onPressed: () async {
                   var result = await Navigator.push(
@@ -317,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(
                   Icons.add,
                   color: Colors.white,
-                  size: ScreenUtil().setWidth(60),
+                  size: getSizeWidth(60),
                 ),
               ),
             ),
@@ -327,10 +335,10 @@ class _HomeScreenState extends State<HomeScreen> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.only(
-              top: ScreenUtil().setHeight(20),
-              bottom: ScreenUtil().setHeight(20),
-              right: ScreenUtil().setWidth(20),
-              left: ScreenUtil().setWidth(isShowMenu ? 320 : 20),
+              top: getSizeHeight(20),
+              bottom: getSizeHeight(20),
+              right: getSizeWidth(20),
+              left: getSizeWidth(isShowMenu ? 320 : 20),
             ),
             child: ListView.separated(
               itemCount: products.length,
@@ -349,28 +357,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Container(
                     width: screenSize.width,
-                    height: ScreenUtil().setHeight(200),
+                    height: getSizeHeight(200),
                     margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(25)),
+                        horizontal: getSizeWidth(25)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         ClipRRect(
                           borderRadius:
-                              BorderRadius.circular(ScreenUtil().setHeight(75)),
+                              BorderRadius.circular(getSizeHeight(75)),
                           child: Image.asset(
                             products[index].imageURL,
-                            width: ScreenUtil().setWidth(150),
-                            height: ScreenUtil().setHeight(150),
+                            width: getSizeWidth(150),
+                            height: getSizeHeight(150),
                             fit: BoxFit.cover,
                             errorBuilder: (context, object, trace) {
                               return SizedBox(
-                                height: ScreenUtil().setHeight(150),
-                                width: ScreenUtil().setWidth(150),
+                                height: getSizeHeight(150),
+                                width: getSizeWidth(150),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(
-                                      ScreenUtil().setHeight(75)),
+                                      getSizeHeight(75)),
                                   child: const Icon(
                                     Icons.image,
                                     size: 100,
@@ -381,14 +389,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: ScreenUtil().setWidth(50),
+                          width: getSizeWidth(50),
                         ),
                         Expanded(
                           flex: 4,
                           child: Text(
                             products[index].name,
                             style:
-                                TextStyle(fontSize: ScreenUtil().setHeight(40)),
+                                TextStyle(fontSize: getSizeHeight(40)),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -407,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             icon: Icon(
                               Icons.edit,
                               color: Colors.purple,
-                              size: ScreenUtil().setHeight(60),
+                              size: getSizeHeight(60),
                             ),
                           ),
                         ),
@@ -417,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             icon: Icon(
                               Icons.business,
                               color: Colors.green,
-                              size: ScreenUtil().setHeight(60),
+                              size: getSizeHeight(60),
                             ),
                           ),
                         ),
@@ -429,7 +437,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             icon: Icon(
                               Icons.delete,
                               color: Colors.red,
-                              size: ScreenUtil().setHeight(60),
+                              size: getSizeHeight(60),
                             ),
                           ),
                         ),
@@ -456,38 +464,38 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context) => AlertDialog(
         title: Text(
           'Delete Item',
-          style: TextStyle(fontSize: ScreenUtil().setHeight(50)),
+          style: TextStyle(fontSize: getSizeHeight(50)),
         ),
         content: SizedBox(
-          width: ScreenUtil().setWidth(800),
-          height: ScreenUtil().setHeight(200),
+          width: getSizeWidth(800),
+          height: getSizeHeight(200),
           child: Center(
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(
                 Icons.delete,
                 color: Colors.red,
-                size: ScreenUtil().setHeight(50),
+                size: getSizeHeight(50),
               ),
               SizedBox(
-                width: ScreenUtil().setWidth(50),
+                width: getSizeWidth(50),
               ),
               Text(
                 'Are You Sure?',
-                style: TextStyle(fontSize: ScreenUtil().setHeight(50)),
+                style: TextStyle(fontSize: getSizeHeight(50)),
               ),
             ]),
           ),
         ),
         actions: [
           SizedBox(
-            width: ScreenUtil().setWidth(800),
-            height: ScreenUtil().setHeight(200),
+            width: getSizeWidth(800),
+            height: getSizeHeight(200),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: ScreenUtil().setWidth(300),
-                  height: ScreenUtil().setHeight(100),
+                  width: getSizeWidth(300),
+                  height: getSizeHeight(100),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -505,17 +513,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       'Yes, Delete',
                       style: TextStyle(
-                        fontSize: ScreenUtil().setHeight(40),
+                        fontSize: getSizeHeight(40),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: ScreenUtil().setWidth(75),
+                  width: getSizeWidth(75),
                 ),
                 SizedBox(
-                  width: ScreenUtil().setWidth(300),
-                  height: ScreenUtil().setHeight(100),
+                  width: getSizeWidth(300),
+                  height: getSizeHeight(100),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -530,7 +538,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       'No',
                       style: TextStyle(
-                        fontSize: ScreenUtil().setHeight(40),
+                        fontSize: getSizeHeight(40),
                       ),
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../models/product.dart';
+import '../utils/dimen_utils.dart';
 
 class CartScreen extends StatefulWidget {
   List<Product> products;
@@ -26,15 +27,15 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildListItem() {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.only(top: ScreenUtil().setWidth(40)),
-        width: ScreenUtil().setWidth(1000),
-        height: ScreenUtil().setHeight(1500),
+        padding: EdgeInsets.only(top: getSizeWidth(40)),
+        width: getSizeWidth(1000),
+        height: getSizeHeight(1500),
         child: ListView.separated(
           physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return Container(
-                width: ScreenUtil().setWidth(1000),
-                height: ScreenUtil().setHeight(200),
+                width: getSizeWidth(1000),
+                height: getSizeHeight(200),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey.withOpacity(0.2),
@@ -42,9 +43,9 @@ class _CartScreenState extends State<CartScreen> {
                 child: Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
-                      width: ScreenUtil().setWidth(150),
-                      height: ScreenUtil().setHeight(150),
+                      margin: EdgeInsets.only(left: getSizeWidth(20)),
+                      width: getSizeWidth(150),
+                      height: getSizeHeight(150),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(75),
                         color: Colors.purple,
@@ -63,7 +64,7 @@ class _CartScreenState extends State<CartScreen> {
                     Expanded(
                       flex: 6,
                       child: Container(
-                        margin: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                        margin: EdgeInsets.all(getSizeWidth(20)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +147,7 @@ class _CartScreenState extends State<CartScreen> {
           },
           icon: Icon(
             Icons.arrow_back,
-            size: ScreenUtil().setWidth(60),
+            size: getSizeWidth(60),
           ),
         ),
         title: const Text('Your Cart'),
@@ -154,12 +155,12 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.all(getSizeWidth(20)),
           child: Column(
             children: [
               Container(
-                width: ScreenUtil().setWidth(1040),
-                height: ScreenUtil().setHeight(200),
+                width: getSizeWidth(1040),
+                height: getSizeHeight(200),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey.withOpacity(0.2),
@@ -168,7 +169,7 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                        margin: EdgeInsets.all(getSizeWidth(20)),
                         child: const Text(
                           'Total',
                           style: TextStyle(fontSize: 40),
@@ -176,8 +177,8 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     Container(
-                      width: ScreenUtil().setWidth(200),
-                      height: ScreenUtil().setHeight(100),
+                      width: getSizeWidth(200),
+                      height: getSizeHeight(100),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
                         color: Colors.purple,
@@ -193,9 +194,9 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-                      width: ScreenUtil().setWidth(350),
-                      height: ScreenUtil().setHeight(100),
+                      margin: EdgeInsets.only(right: getSizeWidth(20)),
+                      width: getSizeWidth(350),
+                      height: getSizeHeight(100),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.purple,
