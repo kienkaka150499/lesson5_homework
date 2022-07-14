@@ -5,6 +5,7 @@ import 'package:lesson5_homework/views/cart_screen.dart';
 
 import '../models/product.dart';
 import 'edit_product.dart';
+import 'fake_data.dart';
 import 'product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,33 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool isListView;
   late bool isShowMenu;
 
-  List<Product> products = [
-    Product(
-        imageURL: 'assets/images/ao_so_mi_nam.png',
-        name: 'Áo Sơ mi',
-        price: 12.6,
-        description: 'Áo sơ mi nam dài tay'),
-    Product(
-        imageURL: 'assets/images/aothun.png',
-        name: 'Áo thun',
-        price: 15.3,
-        description: 'Áo thun thể thao nam'),
-    Product(
-        imageURL: 'assets/images/mu_tron.png',
-        name: 'Mũ vành',
-        price: 6.6,
-        description: 'Mũ tròn cá tính'),
-    Product(
-        imageURL: 'assets/images/vay_xep.png',
-        name: 'Váy xếp',
-        price: 15.8,
-        description: 'Váy xếp ngắn nữ tính'),
-    Product(
-        imageURL: 'assets/images/chan_vay_dai_cong_so.png',
-        name: 'Chân váy dài',
-        price: 21.9,
-        description: 'Chân váy dài công sở dành cho chị em'),
-  ];
+
   List<Product> inCart = [];
 
   @override
@@ -361,93 +336,105 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 var screenSize = MediaQuery.of(context).size;
-                return Container(
-                  width: screenSize.width,
-                  height: ScreenUtil().setHeight(200),
-                  margin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(25)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(ScreenUtil().setHeight(75)),
-                        child: Image.asset(
-                          products[index].imageURL,
-                          width: ScreenUtil().setWidth(150),
-                          height: ScreenUtil().setHeight(150),
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, object, trace) {
-                            return SizedBox(
-                              height: ScreenUtil().setHeight(150),
-                              width: ScreenUtil().setWidth(150),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    ScreenUtil().setHeight(75)),
-                                child: const Icon(
-                                  Icons.image,
-                                  size: 100,
+                return InkWell(
+                  onTap: () async {
+                    var result = await Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return EditScreen(product: products[index]);
+                      }),
+                    );
+                    setState(() {
+                      products[index] = result;
+                    });
+                  },
+                  child: Container(
+                    width: screenSize.width,
+                    height: ScreenUtil().setHeight(200),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(25)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(ScreenUtil().setHeight(75)),
+                          child: Image.asset(
+                            products[index].imageURL,
+                            width: ScreenUtil().setWidth(150),
+                            height: ScreenUtil().setHeight(150),
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, object, trace) {
+                              return SizedBox(
+                                height: ScreenUtil().setHeight(150),
+                                width: ScreenUtil().setWidth(150),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      ScreenUtil().setHeight(75)),
+                                  child: const Icon(
+                                    Icons.image,
+                                    size: 100,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil().setWidth(50),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          products[index].name,
-                          style:
-                              TextStyle(fontSize: ScreenUtil().setHeight(40)),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Expanded(
-                        child: IconButton(
-                          onPressed: () async {
-                            var result = await Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return EditScreen(product: products[index]);
-                              }),
-                            );
-                            setState(() {
-                              products[index] = result;
-                            });
-                          },
-                          icon: Icon(
-                            Icons.edit,
-                            color: Colors.purple,
-                            size: ScreenUtil().setHeight(60),
+                              );
+                            },
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.business,
-                            color: Colors.green,
-                            size: ScreenUtil().setHeight(60),
+                        SizedBox(
+                          width: ScreenUtil().setWidth(50),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Text(
+                            products[index].name,
+                            style:
+                                TextStyle(fontSize: ScreenUtil().setHeight(40)),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: IconButton(
-                          onPressed: () {
-                            _deleteItem(index);
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                            size: ScreenUtil().setHeight(60),
+                        Expanded(
+                          child: IconButton(
+                            onPressed: () async {
+                              var result = await Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) {
+                                  return EditScreen(product: products[index]);
+                                }),
+                              );
+                              setState(() {
+                                products[index] = result;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.purple,
+                              size: ScreenUtil().setHeight(60),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.business,
+                              color: Colors.green,
+                              size: ScreenUtil().setHeight(60),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: IconButton(
+                            onPressed: () {
+                              _deleteItem(index);
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: ScreenUtil().setHeight(60),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -471,7 +458,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'Delete Item',
           style: TextStyle(fontSize: ScreenUtil().setHeight(50)),
         ),
-        content: Container(
+        content: SizedBox(
           width: ScreenUtil().setWidth(800),
           height: ScreenUtil().setHeight(200),
           child: Center(
@@ -492,7 +479,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          Container(
+          SizedBox(
             width: ScreenUtil().setWidth(800),
             height: ScreenUtil().setHeight(200),
             child: Row(
