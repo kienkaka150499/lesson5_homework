@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lesson5_homework/views/cart_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
     isListView = false;
     //isShowMenu = false;
     super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   Widget _buildGridView() {
