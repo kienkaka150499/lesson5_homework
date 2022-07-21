@@ -1,12 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lesson5_homework/views/cart_screen.dart';
+import 'package:provider/provider.dart';
 
+import '../controllers/cart_item.dart';
 import '../models/product.dart';
-import '../utils/dimen_utils.dart';
 import 'edit_product.dart';
-import 'fake_data.dart';
+import '../controllers/fake_data.dart';
 import 'product_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,67 +19,71 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late bool isListView;
   late bool isShowMenu;
+  late double _width;
+  late double _height;
 
+  // FakeProductList productList = FakeProductList();
 
-  List<Product> inCart = [];
+  // CartItem cartItem=CartItem();
 
   @override
   initState() {
     isListView = false;
     isShowMenu = false;
     super.initState();
-
-    double sizeHeight = getSizeHeight(200);
-
-    double sizeWidth = getSizeWidth(300);
-
-    print('Height: $sizeHeight , Width: $sizeWidth');
-
   }
 
   Widget _buildSideMenu() {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: getSizeWidth(isShowMenu ? 300 : 0),
+      width: isShowMenu ? 100 : 0,
+      height: _height,
       color: Colors.purple.withOpacity(0.7),
-      child: Column(
+      child: Stack(
         children: [
-          SizedBox(
-            height: getSizeHeight(200),
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                isListView = true;
-              });
-            },
-            child: SizedBox(
-              width: getSizeWidth(300),
-              height: getSizeHeight(70),
-              child: const Text(
-                'List Products',
-                style: TextStyle(fontSize: 27, color: Colors.white),
-                textAlign: TextAlign.center,
+          Positioned(
+            top: 100,
+            left: 2.5,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  isListView = true;
+                });
+              },
+              child: Container(
+                height: 20,
+                width: 95,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.purpleAccent),
+                    color: Colors.purpleAccent),
+                child: const Text(
+                  'List Products',
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
-          Divider(
-            thickness: 0,
-            color: Colors.purple.withOpacity(0.7),
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                isListView = false;
-              });
-            },
-            child: SizedBox(
-              width: getSizeWidth(300),
-              height: getSizeHeight(70),
-              child: const Text(
-                'Grid Products',
-                style: TextStyle(fontSize: 27, color: Colors.white),
-                textAlign: TextAlign.center,
+          Positioned(
+            top: 130,
+            left: 2.5,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  isListView = false;
+                });
+              },
+              child: Container(
+                height: 20,
+                width: 95,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.purpleAccent),
+                    color: Colors.purpleAccent),
+                child: const Text(
+                  'Grid Products',
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -89,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildGridView() {
+    FakeProductList productList=context.watch<FakeProductList>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple.withOpacity(0.8),
@@ -98,10 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
               isShowMenu = !isShowMenu;
             });
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.menu,
             color: Colors.white,
-            size: getSizeHeight(60),
+            size: 30,
           ),
         ),
         title: const Text(
@@ -111,71 +116,74 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.more_vert,
               color: Colors.white,
-              size: getSizeHeight(60),
+              size: 30,
             ),
           ),
-          Badge(
-            position: BadgePosition.topEnd(top: 5, end: 9),
-            toAnimate: false,
-            // animationType: BadgeAnimationType.scale,
-            // animationDuration: const Duration(milliseconds: 300),
-            badgeContent: Text(
-              inCart.length.toString(),
-              style: const TextStyle(color: Colors.white, fontSize: 18),
-            ),
-            showBadge: inCart.isEmpty ? false : true,
-            badgeColor: Colors.red,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: IconButton(
-                onPressed: () async{
-                   await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => CartScreen(products: inCart),
-                    ),
-                  );
-                  setState(() {});
-                },
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                  size: getSizeHeight(60),
+          Consumer<CartItem>(
+            builder: (context, cartItem, child) {
+              return Badge(
+                position: BadgePosition.topEnd(top: 5, end: 12),
+                toAnimate: false,
+                // animationType: BadgeAnimationType.scale,
+                // animationDuration: const Duration(milliseconds: 300),
+                badgeContent: Text(
+                  cartItem.productList.length.toString(),
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
-              ),
-            ),
+                showBadge: cartItem.productList.isEmpty ? false : true,
+                badgeColor: Colors.red,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: IconButton(
+                    onPressed: () async {
+                      var result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) =>
+                              CartScreen(),
+                        ),
+                      );
+
+                      setState(() {});
+                    },
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              );
+            },
           )
         ],
       ),
       body: SafeArea(
         child: Stack(children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            padding: EdgeInsets.only(
-              top: getSizeHeight(20),
-              bottom: getSizeHeight(20),
-              right: getSizeWidth(20),
-              left: getSizeWidth(isShowMenu ? 320 : 20),
-            ),
+          Container(
+            padding: const EdgeInsets.all(5),
             child: GridView.builder(
-              itemCount: products.length,
+              itemCount: productList.products.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => ProductScreen(
-                                  product: products[index],
-                                )));
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ProductScreen(
+                          product: productList.products[index],
+                        ),
+                      ),
+                    );
                   },
                   child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(15)),
-                    margin: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    // margin: const EdgeInsets.all(6),
                     alignment: Alignment.center,
                     child: Stack(
                       alignment: Alignment.bottomCenter,
@@ -183,9 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: Image.asset(
-                            products[index].imageURL,
+                            productList.products[index].imageURL,
                             fit: BoxFit.cover,
-                            width: MediaQuery.of(context).size.width / 2 - 12,
+                            width: _width < 600 ? _width / 2 : _width / 3,
                             errorBuilder: (a, b, c) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
@@ -195,8 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Container(
-                          height: 60,
-                          width: MediaQuery.of(context).size.width / 2 - 12,
+                          height: 45,
+                          width: _width < 600 ? _width / 2 : _width / 3,
                           decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.6),
                             borderRadius: const BorderRadius.only(
@@ -205,66 +213,60 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      products[index].favorite =
-                                          !products[index].favorite;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    products[index].favorite
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: Colors.purpleAccent,
-                                    size: 40,
-                                  ),
+                              IconButton(
+                                onPressed: () {
+                                  productList.updateFavoriteState(
+                                      productList.products[index]);
+                                },
+                                icon: Icon(
+                                  productList.products[index].favorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: Colors.purpleAccent,
+                                  size: 30,
                                 ),
                               ),
                               Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    products[index].name,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 25),
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                  )),
-                              Expanded(
-                                child: Badge(
-                                  position: BadgePosition.topEnd(
-                                      top: 1, end: getSizeWidth(10)),
-                                  toAnimate: false,
-                                  // animationType: BadgeAnimationType.scale,
-                                  // animationDuration: const Duration(milliseconds: 300),
-                                  badgeContent: Text(
-                                    products[index].inCart.toString(),
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                child: Text(
+                                  productList.products[index].name,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Badge(
+                                position: BadgePosition.topEnd(
+                                  top: 1,
+                                  end: 5,
+                                ),
+                                toAnimate: false,
+                                // animationType: BadgeAnimationType.scale,
+                                // animationDuration: const Duration(milliseconds: 300),
+                                badgeContent: Text(
+                                  productList.products[index].inCart.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                ),
+                                showBadge:
+                                    productList.products[index].inCart == 0
+                                        ? false
+                                        : true,
+                                badgeColor: Colors.red,
+                                child: IconButton(
+                                  onPressed: () {
+                                    productList.updateInCart(
+                                        productList.products[index]);
+                                    context.read<CartItem>().addItemToCart(
+                                        productList.products[index]);
+                                  },
+                                  icon: const Icon(
+                                    Icons.shopping_cart,
+                                    color: Colors.purpleAccent,
+                                    size: 30,
                                   ),
-                                  showBadge: products[index].inCart == 0
-                                      ? false
-                                      : true,
-                                  badgeColor: Colors.red,
-                                  child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (inCart
-                                              .contains(products[index])) {
-                                            products[index].inCart++;
-                                          } else {
-                                            (inCart.add(products[index]));
-                                            products[index].inCart++;
-                                          }
-                                        });
-                                      },
-                                      icon: const Icon(
-                                        Icons.shopping_cart,
-                                        color: Colors.purpleAccent,
-                                        size: 40,
-                                      )),
                                 ),
                               )
                             ],
@@ -275,8 +277,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 3 / 2),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: _width < 600 ? 2 : 3,
+                  childAspectRatio: 3 / 2,
+                  mainAxisSpacing: 5,
+                  crossAxisSpacing: 5),
             ),
           ),
           _buildSideMenu(),
@@ -286,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildListView() {
+    FakeProductList productList=context.read<FakeProductList>();
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.purple.withOpacity(0.8),
@@ -295,10 +301,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 isShowMenu = !isShowMenu;
               });
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.menu,
               color: Colors.white,
-              size: getSizeHeight(60),
+              size: 30,
             ),
           ),
           title: const Text(
@@ -306,27 +312,22 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(color: Colors.white),
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: getSizeWidth(30)),
-              child: IconButton(
-                onPressed: () async {
-                  var result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => EditScreen(),
-                    ),
-                  );
-                  setState(() {
-                    if (result != null) {
-                      products.add(result);
-                    }
-                  });
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: getSizeWidth(60),
-                ),
+            IconButton(
+              onPressed: () async {
+                var result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => EditScreen(),
+                  ),
+                );
+                if (result != null) {
+                  productList.addItemToList(result);
+                }
+              },
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
               ),
             ),
           ]),
@@ -334,69 +335,58 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            padding: EdgeInsets.only(
-              top: getSizeHeight(20),
-              bottom: getSizeHeight(20),
-              right: getSizeWidth(20),
-              left: getSizeWidth(isShowMenu ? 320 : 20),
-            ),
+            padding: const EdgeInsets.all(5),
             child: ListView.separated(
-              itemCount: products.length,
+              itemCount: productList.products.length,
               itemBuilder: (context, index) {
-                var screenSize = MediaQuery.of(context).size;
                 return InkWell(
                   onTap: () async {
                     var result = await Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) {
-                        return EditScreen(product: products[index]);
+                        return EditScreen(product: productList.products[index]);
                       }),
                     );
-                    setState(() {
-                      products[index] = result;
-                    });
+                    context.read<CartItem>().updateEditItem(productList.products[index], result);
+                    productList.updateItem(result, index);
                   },
                   child: Container(
-                    width: screenSize.width,
-                    height: getSizeHeight(200),
-                    margin: EdgeInsets.symmetric(
-                        horizontal: getSizeWidth(25)),
+                    width: _width,
+                    height: 80,
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(getSizeHeight(75)),
+                          borderRadius: BorderRadius.circular(40),
                           child: Image.asset(
-                            products[index].imageURL,
-                            width: getSizeWidth(150),
-                            height: getSizeHeight(150),
+                            productList.products[index].imageURL,
+                            width: 80,
+                            height: 80,
                             fit: BoxFit.cover,
                             errorBuilder: (context, object, trace) {
                               return SizedBox(
-                                height: getSizeHeight(150),
-                                width: getSizeWidth(150),
+                                height: 80,
+                                width: 80,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      getSizeHeight(75)),
+                                  borderRadius: BorderRadius.circular(40),
                                   child: const Icon(
                                     Icons.image,
-                                    size: 100,
+                                    size: 80,
                                   ),
                                 ),
                               );
                             },
                           ),
                         ),
-                        SizedBox(
-                          width: getSizeWidth(50),
+                        const SizedBox(
+                          width: 20,
                         ),
                         Expanded(
                           flex: 4,
                           child: Text(
-                            products[index].name,
-                            style:
-                                TextStyle(fontSize: getSizeHeight(40)),
+                            productList.products[index].name,
+                            style: const TextStyle(fontSize: 20),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -405,39 +395,39 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () async {
                               var result = await Navigator.of(context).push(
                                 MaterialPageRoute(builder: (context) {
-                                  return EditScreen(product: products[index]);
+                                  return EditScreen(
+                                      product: productList.products[index]);
                                 }),
                               );
-                              setState(() {
-                                products[index] = result;
-                              });
+                              context.read<CartItem>().updateEditItem(productList.products[index], result);
+                              productList.updateItem(result, index);
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.edit,
                               color: Colors.purple,
-                              size: getSizeHeight(60),
+                              size: 30,
                             ),
                           ),
                         ),
                         Expanded(
                           child: IconButton(
                             onPressed: () {},
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.business,
                               color: Colors.green,
-                              size: getSizeHeight(60),
+                              size: 30,
                             ),
                           ),
                         ),
                         Expanded(
                           child: IconButton(
                             onPressed: () {
-                              _deleteItem(index);
+                              _deleteItem(productList.products[index]);
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.delete,
                               color: Colors.red,
-                              size: getSizeHeight(60),
+                              size: 30,
                             ),
                           ),
                         ),
@@ -458,72 +448,73 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future _deleteItem(int index) {
+  Future _deleteItem(Product product) {
+    FakeProductList productList=context.read<FakeProductList>();
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: Text(
+        title: const Text(
           'Delete Item',
-          style: TextStyle(fontSize: getSizeHeight(50)),
+          style: TextStyle(fontSize: 25),
         ),
         content: SizedBox(
-          width: getSizeWidth(800),
-          height: getSizeHeight(200),
+          width: 300,
+          height: 100,
           child: Center(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(
-                Icons.delete,
-                color: Colors.red,
-                size: getSizeHeight(50),
-              ),
-              SizedBox(
-                width: getSizeWidth(50),
-              ),
-              Text(
-                'Are You Sure?',
-                style: TextStyle(fontSize: getSizeHeight(50)),
-              ),
-            ]),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    size: 25,
+                  ),
+                  SizedBox(
+                    width: 25,
+                  ),
+                  Text(
+                    'Are You Sure?',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ]),
           ),
         ),
         actions: [
           SizedBox(
-            width: getSizeWidth(800),
-            height: getSizeHeight(200),
+            width: 300,
+            height: 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: getSizeWidth(300),
-                  height: getSizeHeight(100),
+                  width: 120,
+                  height: 50,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      setState(() {
-                        products.removeAt(index);
-                      });
+                      productList.deleteItem(product);
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(25),
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Yes, Delete',
                       style: TextStyle(
-                        fontSize: getSizeHeight(40),
+                        fontSize: 15,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: getSizeWidth(75),
+                const SizedBox(
+                  width: 20,
                 ),
                 SizedBox(
-                  width: getSizeWidth(300),
-                  height: getSizeHeight(100),
+                  width: 120,
+                  height: 50,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -531,14 +522,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(25),
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'No',
                       style: TextStyle(
-                        fontSize: getSizeHeight(40),
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -556,7 +547,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _width = MediaQuery.of(context).size.width;
+    _height = MediaQuery.of(context).size.height;
     // TODO: implement build
-    return isListView ? _buildListView() : _buildGridView();
+    // return Consumer<FakeProductList>(builder: (context, productList, child) {
+    //   return isListView
+    //       ? _buildListView(productList)
+    //       : _buildGridView(productList);
+    // });
+    return isListView?_buildListView():_buildGridView();
   }
 }

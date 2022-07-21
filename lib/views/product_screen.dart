@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../models/product.dart';
-import '../utils/dimen_utils.dart';
 
 class ProductScreen extends StatelessWidget {
   Product product;
@@ -38,10 +36,10 @@ class ProductScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_back,
-                      color: Colors.black,
-                      size: getSizeWidth(80),
+                      color: Colors.white,
+                      size: 40,
                     ),
                   ),
                 ),

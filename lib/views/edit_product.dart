@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../models/product.dart';
-import '../utils/dimen_utils.dart';
 
 class EditScreen extends StatefulWidget {
  Product? product;
@@ -43,18 +41,18 @@ class _EditScreenState extends State<EditScreen> {
           onPressed: () {
             Navigator.pop(context, widget.product);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_left,
-            size: getSizeHeight(60),
+            size: 30,
           ),
         ),
         title: Text(widget.product!=null?
           'Edit Product':'Add Product',
-          style: TextStyle(fontSize: getSizeHeight(40)),
+          style: const TextStyle(fontSize: 20),
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: getSizeHeight(30)),
+            padding: const EdgeInsets.only(right: 15),
             child: IconButton(
               onPressed: () {
                 if (_formKey.currentState?.validate() == true) {
@@ -66,10 +64,10 @@ class _EditScreenState extends State<EditScreen> {
                       price: double.tryParse(priceController.text)!);
                 }
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.save,
                 color: Colors.white,
-                size: getSizeHeight(60),
+                size: 30,
               ),
             ),
           )
@@ -78,20 +76,20 @@ class _EditScreenState extends State<EditScreen> {
       ),
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.all(getSizeHeight(20)),
+          margin: const EdgeInsets.all(5),
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
               SizedBox(
-                height: getSizeHeight(100),
+                height: 50,
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       'Expanded',
-                      style: TextStyle(fontSize: getSizeHeight(40)),
+                      style: TextStyle(fontSize: 20),
                     ),
-                    SizedBox(
-                      width: getSizeWidth(20),
+                    const SizedBox(
+                      width: 10,
                     ),
                     Expanded(
                       child: Container(
@@ -106,7 +104,7 @@ class _EditScreenState extends State<EditScreen> {
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
                               backgroundColor: Colors.black.withOpacity(0.5),
-                              fontSize: getSizeHeight(30),
+                              fontSize: 15,
                             ),
                           ),
                         ),
@@ -124,7 +122,7 @@ class _EditScreenState extends State<EditScreen> {
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.5),
                             backgroundColor: Colors.black.withOpacity(0.5),
-                            fontSize: getSizeHeight(30),
+                            fontSize: 15,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -143,7 +141,7 @@ class _EditScreenState extends State<EditScreen> {
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
                               backgroundColor: Colors.black.withOpacity(0.5),
-                              fontSize: getSizeHeight(30),
+                              fontSize: 15,
                             ),
                             textAlign: TextAlign.right,
                           ),
@@ -158,15 +156,15 @@ class _EditScreenState extends State<EditScreen> {
                 child: Column(
                   children: [
                     TextFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Title',
                         labelStyle: TextStyle(
-                          fontSize: getSizeWidth(50),
+                          fontSize: 20,
                         ),
                       ),
                       controller: nameController,
-                      style: TextStyle(
-                        fontSize: getSizeWidth(50),
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
                       validator: (String? value) {
                         if (value?.isEmpty == true) {
@@ -176,16 +174,16 @@ class _EditScreenState extends State<EditScreen> {
                       },
                     ),
                     TextFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Price',
                         labelStyle: TextStyle(
-                          fontSize: getSizeWidth(50),
+                          fontSize: 20,
                         ),
                       ),
                       controller: priceController,
                       keyboardType: TextInputType.number,
-                      style: TextStyle(
-                        fontSize: getSizeWidth(50),
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
                       validator: (value) {
                         if (value?.isEmpty == true) {
@@ -201,15 +199,15 @@ class _EditScreenState extends State<EditScreen> {
                       },
                     ),
                     TextFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Description',
                         labelStyle: TextStyle(
-                          fontSize: getSizeWidth(50),
+                          fontSize: 20,
                         ),
                       ),
                       controller: descriptionController,
-                      style: TextStyle(
-                        fontSize: getSizeWidth(50),
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
                       validator: (String? value) {
                         if (value?.isEmpty == true) {
@@ -222,7 +220,7 @@ class _EditScreenState extends State<EditScreen> {
                       height: 10,
                     ),
                     SizedBox(
-                      height: getSizeHeight(200),
+                      height: 100,
                       width: MediaQuery.of(context).size.width,
                       child: Row(
                         children: [
@@ -234,15 +232,15 @@ class _EditScreenState extends State<EditScreen> {
                               borderRadius: BorderRadius.circular(25),
                               child: Image.asset(
                                 imgURL,
-                                width: getSizeWidth(200),
-                                height: getSizeHeight(200),
+                                width: 100,
+                                height: 100,
                                 fit: BoxFit.cover,
                                 errorBuilder:
                                     (context, object, StackTrace? strace) {
-                                  return SizedBox(
-                                    width: getSizeWidth(200),
-                                    height: getSizeHeight(200),
-                                    child: const Icon(
+                                  return const SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: Icon(
                                       Icons.image,
                                       size: 80,
                                     ),
@@ -251,21 +249,21 @@ class _EditScreenState extends State<EditScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: getSizeWidth(20),
+                          const SizedBox(
+                            width: 10,
                           ),
                           Expanded(
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Image URL',
                                 labelStyle: TextStyle(
-                                  fontSize: getSizeWidth(50),
+                                  fontSize: 20,
                                 ),
                               ),
                               maxLines: 1,
                               controller: imageURLController,
-                              style: TextStyle(
-                                fontSize: getSizeWidth(50),
+                              style: const TextStyle(
+                                fontSize: 20,
                               ),
                               onChanged: (value){
                                 setState((){

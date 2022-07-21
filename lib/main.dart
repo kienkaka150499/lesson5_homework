@@ -1,10 +1,19 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lesson5_homework/controllers/cart_item.dart';
+import 'package:lesson5_homework/controllers/fake_data.dart';
+import 'package:lesson5_homework/models/product.dart';
 import 'package:lesson5_homework/views/home_screen.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context)=>CartItem()),
+        ChangeNotifierProvider(create: (context)=>FakeProductList()),
+      ],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
