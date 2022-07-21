@@ -27,7 +27,7 @@ class _CartScreenState extends State<CartScreen> {
       child: Container(
         padding: const EdgeInsets.only(top: 15),
         width: _width,
-        height: _height - 200,
+        height: _height - 170,
         child: ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
@@ -299,7 +299,7 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                 ],
                               ),
-                              duration: const Duration(seconds: 5),
+                              duration: const Duration(seconds: 3),
                             ),
                           );
                         }
