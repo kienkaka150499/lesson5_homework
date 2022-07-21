@@ -146,7 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               CartScreen(),
                         ),
                       );
-
+                      for(var product in productList.products){
+                        cartItem.productList.contains(product)?'':product.inCart=0;
+                      }
                       setState(() {});
                     },
                     icon: const Icon(

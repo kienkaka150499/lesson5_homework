@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lesson5_homework/controllers/cart_item.dart';
 import 'package:provider/provider.dart';
 
+import '../models/product.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _CartScreenState extends State<CartScreen> {
   late double _height;
   bool isDeleteTap = false;
   List<bool> deleteChecked = [];
+  List<Product> productBeforeDelete = [];
 
   @override
   initState() {
@@ -239,34 +241,67 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     InkWell(
                       onTap: () {
+                        int count = 0;
                         isDeleteTap = !isDeleteTap;
                         if (isDeleteTap) {
                           for (var index = 0;
-                          index <
-                              context.read<CartItem>().productList.length;
-                          index++) {
+                              index <
+                                  context.read<CartItem>().productList.length;
+                              index++) {
                             deleteChecked.add(false);
                           }
                         } else {
-                          for (var index = context.read<CartItem>().productList.length-1;
-                              index >=0
-                                  ;
+                          productBeforeDelete.clear();
+                          productBeforeDelete.addAll(
+                              (context.read<CartItem>().productList),);
+                          for (var index =
+                                  context.read<CartItem>().productList.length -
+                                      1;
+                              index >= 0;
                               index--) {
                             if (deleteChecked[index]) {
                               context
                                   .read<CartItem>()
-                                  .productList[index]
-                                  .addToCart(-context
-                                      .read<CartItem>()
-                                      .productList[index]
-                                      .inCart);
-                              context
-                                  .read<CartItem>()
                                   .productList
                                   .removeAt(index);
+                              count++;
                             }
                           }
                           deleteChecked.clear();
+                        }
+                        if (count > 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text('Đã xóa $count Item!'),
+                                  ),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        context.read<CartItem>().productList.clear();
+                                        context.read<CartItem>().productList.addAll(
+                                            productBeforeDelete);
+                                        setState(() {});
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.blue),
+                                      ),
+                                      child: const Text(
+                                        'Undo',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              duration: const Duration(seconds: 5),
+                            ),
+                          );
                         }
                         setState(() {});
                       },
