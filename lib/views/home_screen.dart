@@ -18,7 +18,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool isListView;
-  late bool isShowMenu;
+
+  //late bool isShowMenu;
   late double _width;
   late double _height;
 
@@ -29,86 +30,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   initState() {
     isListView = false;
-    isShowMenu = false;
+    //isShowMenu = false;
     super.initState();
   }
 
-  Widget _buildSideMenu() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      width: isShowMenu ? 100 : 0,
-      height: _height,
-      color: Colors.purple.withOpacity(0.7),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 100,
-            left: 2.5,
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  isListView = true;
-                });
-              },
-              child: Container(
-                height: 20,
-                width: 95,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.purpleAccent),
-                    color: Colors.purpleAccent),
-                child: const Text(
-                  'List Products',
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 130,
-            left: 2.5,
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  isListView = false;
-                });
-              },
-              child: Container(
-                height: 20,
-                width: 95,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.purpleAccent),
-                    color: Colors.purpleAccent),
-                child: const Text(
-                  'Grid Products',
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildGridView() {
-    FakeProductList productList=context.watch<FakeProductList>();
+    FakeProductList productList = context.watch<FakeProductList>();
     return Scaffold(
+      drawer: _buildDrawerMenu(),
       appBar: AppBar(
         backgroundColor: Colors.purple.withOpacity(0.8),
-        leading: IconButton(
-          onPressed: () {
-            setState(() {
-              isShowMenu = !isShowMenu;
-            });
-          },
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.white,
-            size: 30,
-          ),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     setState(() {
+        //       isShowMenu = !isShowMenu;
+        //     });
+        //   },
+        //   icon: const Icon(
+        //     Icons.menu,
+        //     color: Colors.white,
+        //     size: 30,
+        //   ),
+        // ),
         title: const Text(
           'MyShop',
           style: TextStyle(color: Colors.white),
@@ -142,12 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       var result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (builder) =>
-                              CartScreen(),
+                          builder: (builder) => CartScreen(),
                         ),
                       );
-                      for(var product in productList.products){
-                        cartItem.productList.contains(product)?'':product.inCart=0;
+                      for (var product in productList.products) {
+                        cartItem.productList.contains(product)
+                            ? ''
+                            : product.inCart = 0;
                       }
                       setState(() {});
                     },
@@ -286,29 +230,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisSpacing: 5),
             ),
           ),
-          _buildSideMenu(),
         ]),
       ),
     );
   }
 
   Widget _buildListView() {
-    FakeProductList productList=context.read<FakeProductList>();
+    FakeProductList productList = context.read<FakeProductList>();
     return Scaffold(
+      drawer: _buildDrawerMenu(),
       appBar: AppBar(
           backgroundColor: Colors.purple.withOpacity(0.8),
-          leading: IconButton(
-            onPressed: () {
-              setState(() {
-                isShowMenu = !isShowMenu;
-              });
-            },
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.white,
-              size: 30,
-            ),
-          ),
+          // leading: IconButton(
+          //   onPressed: () {
+          //     setState(() {
+          //       isShowMenu = !isShowMenu;
+          //     });
+          //   },
+          //   icon: const Icon(
+          //     Icons.menu,
+          //     color: Colors.white,
+          //     size: 30,
+          //   ),
+          // ),
           title: const Text(
             'MyShop',
             style: TextStyle(color: Colors.white),
@@ -348,7 +292,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         return EditScreen(product: productList.products[index]);
                       }),
                     );
-                    context.read<CartItem>().updateEditItem(productList.products[index], result);
+                    context
+                        .read<CartItem>()
+                        .updateEditItem(productList.products[index], result);
                     productList.updateItem(result, index);
                   },
                   child: Container(
@@ -401,7 +347,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       product: productList.products[index]);
                                 }),
                               );
-                              context.read<CartItem>().updateEditItem(productList.products[index], result);
+                              context.read<CartItem>().updateEditItem(
+                                  productList.products[index], result);
                               productList.updateItem(result, index);
                             },
                             icon: const Icon(
@@ -444,14 +391,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          _buildSideMenu(),
         ]),
       ),
     );
   }
 
   Future _deleteItem(Product product) {
-    FakeProductList productList=context.read<FakeProductList>();
+    FakeProductList productList = context.read<FakeProductList>();
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -557,6 +503,48 @@ class _HomeScreenState extends State<HomeScreen> {
     //       ? _buildListView(productList)
     //       : _buildGridView(productList);
     // });
-    return isListView?_buildListView():_buildGridView();
+    return isListView ? _buildListView() : _buildGridView();
+  }
+
+  _buildDrawerMenu() {
+    return Drawer(
+      width: 200,
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.purple,
+            ),
+            child: Text('Drawer Header'),
+          ),
+          ListTile(
+            title: const Text('ListView'),
+            onTap: () {
+              setState(() {
+                isListView = true;
+              });
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('GridView'),
+            onTap: () {
+              setState(() {
+                isListView = false;
+              });
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
